@@ -1,9 +1,9 @@
 import sys
 
 
-def ranges() -> list[tuple[int, int]]:
+def ranges() -> list[range]:
     return [
-        (int(r[0]), int(r[1]))
+        range(int(r[0]), int(r[1]) + 1)
         for r in [r.split("-") for r in open(sys.argv[1], "r").readline().split(",")]
     ]
 
@@ -19,9 +19,7 @@ def valid(n: int) -> int:
 
 
 def part_one() -> int:
-    return sum(
-        sum([valid(n) for n in range(start, stop + 1)]) for start, stop in ranges()
-    )
+    return sum([sum(valid(n) for n in r) for r in ranges()])
 
 
 print(f"Part one: {part_one()}")
