@@ -19,4 +19,25 @@ def part_one() -> int:
     return r
 
 
+def part_two() -> int:
+    ranges, _ = ranges_ingredients()
+    sorted_ranges = sorted(ranges)
+    r = 0
+    low, high = sorted_ranges[0]
+    for l, h in sorted_ranges[1:]:
+        # all numbers are already included
+        if h <= high:
+            pass
+        # no intersection, add numbers from previous range
+        elif l > high:
+            r += (high - low) + 1
+            high, low = h, l
+        # intersection, union the ranges, do not add numbers yet
+        elif l <= high:
+            low, high = low, h
+    r += (high - low) + 1
+    return r
+
+
 print(f"Part one: {part_one()}")
+print(f"Part two: {part_two()}")
