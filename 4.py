@@ -30,16 +30,37 @@ def accessible(y: int, x: int, grid: list[list[str]]) -> bool:
     return False
 
 
-def part_one() -> int:
-    g = grid()
-    a = 0
-    for y, l in enumerate(g):
+def mark(grid: list[list[str]]) -> list[tuple[int, int]]:
+    paper = []
+    for y, l in enumerate(grid):
         for x, s in enumerate(l):
             if s != "@":
                 continue
-            if accessible(y, x, g):
-                a += 1
-    return a
+            if accessible(y, x, grid):
+                paper.append((y, x))
+    return paper
+
+
+def remove(grid: list[list[str]], paper: list[tuple[int, int]]) -> list[list[str]]:
+    for y, x in paper:
+        grid[y][x] = "x"
+    return grid
+
+
+def part_one() -> int:
+    return len(mark(grid()))
+
+
+def part_two() -> int:
+    g = grid()
+    r = 0
+    while True:
+        paper = mark(g)
+        if len(paper) == 0:
+            return r
+        r += len(paper)
+        g = remove(g, paper)
 
 
 print(f"Part one: {part_one()}")
+print(f"Part two: {part_two()}")
