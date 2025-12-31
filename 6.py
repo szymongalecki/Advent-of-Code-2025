@@ -24,9 +24,36 @@ def solve(numbers: list[list[int]], operators: list[str]) -> int:
     return sum(answers)
 
 
+def lines() -> list[list[str]]:
+    return [list(l.replace("\n", "")) for l in open(sys.argv[1], "r").readlines()]
+
+
+def solve_column_wise(lines: list[list[str]]) -> int:
+    candidates = ["".join(t) for t in numpy.array(lines[:-1]).transpose().tolist()]
+    operators = [o for o in lines[-1] if o != " "]
+    numbers = []
+    answers = []
+    for operator in operators:
+        while candidates:
+            try:
+                numbers.append(int(candidates.pop(0)))
+            except:
+                answers.append(solve([numbers], [operator]))
+                numbers = []
+                break
+            if candidates == []:
+                answers.append(solve([numbers], [operator]))
+    return sum(answers)
+
+
 def part_one() -> int:
     numbers, operators = numbers_operators()
     return solve(numbers, operators)
 
 
+def part_two() -> int:
+    return solve_column_wise(lines())
+
+
 print(f"Part one: {part_one()}")
+print(f"Part two: {part_two()}")
