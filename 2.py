@@ -8,18 +8,36 @@ def ranges() -> list[range]:
     ]
 
 
-def valid(n: int) -> int:
+def repeated_twice(n: int) -> bool:
     s = str(n)
     l = len(s)
     if l % 2 != 0:
-        return 0
+        return False
     if s[: l // 2] == s[l // 2 :]:
-        return n
-    return 0
+        return True
+    return False
+
+
+def repeated_any(n: int) -> bool:
+    s = str(n)
+    l = len(s)
+    w = len(s) // 2
+    while w > 0:
+        sequences = [s[i : i + w] for i in range(0, l, w)]
+        unique = set(sequences)
+        if len(sequences) > 1 and len(unique) == 1:
+            return True
+        w -= 1
+    return False
 
 
 def part_one() -> int:
-    return sum([sum(valid(n) for n in r) for r in ranges()])
+    return sum([sum(n for n in r if repeated_twice(n)) for r in ranges()])
+
+
+def part_two() -> int:
+    return sum([sum(n for n in r if repeated_any(n)) for r in ranges()])
 
 
 print(f"Part one: {part_one()}")
+print(f"Part two: {part_two()}")
